@@ -3,9 +3,20 @@
 // Check if user is authenticated
 async function checkAuth() {
     try {
-        const response = await authAPI.checkAuth();
-        return response.authenticated;
+        const response = await fetch('http://localhost:5000/api/check-auth', {
+            method: 'GET',
+            credentials: 'include' // Important: include cookies
+        });
+        
+        if (!response.ok) {
+            console.error('Auth check failed:', response.status);
+            return false;
+        }
+        
+        const data = await response.json();
+        return data.authenticated || false;
     } catch (error) {
+        console.error('Error checking auth:', error);
         return false;
     }
 }

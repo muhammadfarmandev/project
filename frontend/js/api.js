@@ -6,7 +6,7 @@ const API_BASE = 'http://localhost:5000/api';
 async function apiCall(endpoint, method = 'GET', body = null, isFormData = false) {
     const options = {
         method: method,
-        credentials: 'include', // Important for sessions
+        credentials: 'include', // Important for sessions - sends cookies
         headers: {}
     };
     

@@ -15,7 +15,14 @@ app.config['SECRET_KEY'] = SECRET_KEY
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
-# Enable CORS for API calls
+# Session configuration for cookies
+app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24 hours in seconds
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
+
+# Enable CORS for API calls (needed if frontend is on different origin)
+# Since Flask serves static files, same origin, but keeping for flexibility
 CORS(app, supports_credentials=True)
 
 # Register routes

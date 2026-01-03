@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSOS - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">NSOS</h1>
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <a href="officers.html" class="nav-link">Officers</a>
+                <a href="criminals.html" class="nav-link">Criminals</a>
+                <a href="cases.html" class="nav-link">Cases</a>
+                <a href="evidence.html" class="nav-link">Evidence</a>
+                <a href="duties.html" class="nav-link">Duties</a>
+                <a href="search.html" class="nav-link">Search</a>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h2>Dashboard</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3 id="officerCount">-</h3>
+                <p>Officers</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="criminalCount">-</h3>
+                <p>Criminals</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="caseCount">-</h3>
+                <p>Cases</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="openCaseCount">-</h3>
+                <p>Open Cases</p>
+            </div>
+        </div>
+        
+        <div class="quick-links">
+            <h3>Quick Actions</h3>
+            <div class="links-grid">
+                <a href="officers.html" class="link-card">
+                    <h4>Manage Officers</h4>
+                    <p>Add, view, update officers</p>
+                </a>
+                <a href="criminals.html" class="link-card">
+                    <h4>Manage Criminals</h4>
+                    <p>Add, view, update criminals</p>
+                </a>
+                <a href="cases.html" class="link-card">
+                    <h4>Manage Cases</h4>
+                    <p>Register and track FIRs</p>
+                </a>
+                <a href="evidence.html" class="link-card">
+                    <h4>Evidence</h4>
+                    <p>Upload and manage evidence</p>
+                </a>
+                <a href="duties.html" class="link-card">
+                    <h4>Duty Assignment</h4>
+                    <p>Assign duties to officers</p>
+                </a>
+                <a href="search.html" class="link-card">
+                    <h4>Search</h4>
+                    <p>Search cases and criminals</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
+

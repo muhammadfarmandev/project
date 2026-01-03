@@ -1,0 +1,62 @@
+# Main Flask application for NSOS
+# Police Station Management System
+
+from flask import Flask, send_from_directory
+from flask_cors import CORS
+from config import SECRET_KEY, UPLOAD_FOLDER
+from routes import routes
+import os
+
+# Create Flask app
+app = Flask(__name__, static_folder='../frontend', static_url_path='')
+
+# Configure app
+app.config['SECRET_KEY'] = SECRET_KEY
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+
+# Enable CORS for API calls
+CORS(app, supports_credentials=True)
+
+# Register routes
+app.register_blueprint(routes)
+
+# Create uploads folder if it doesn't exist
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+
+# Serve static files from frontend
+@app.route('/')
+def index():
+    return send_from_directory(app.static_folder, 'index.html')
+
+
+@app.route('/<path:path>')
+def serve_static(path):
+    """Serve static files"""
+    return send_from_directory(app.static_folder, path)
+
+
+# Serve uploaded files
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    """Serve uploaded evidence files"""
+    return send_from_directory(UPLOAD_FOLDER, filename)
+
+
+# Error handlers
+@app.errorhandler(404)
+def not_found(error):
+    return {'error': 'Not found'}, 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return {'error': 'Internal server error'}, 500
+
+
+if __name__ == '__main__':
+    # Run the app
+    app.run(debug=True, host='0.0.0.0', port=5000)
+

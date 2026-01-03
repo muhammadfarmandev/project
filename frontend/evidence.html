@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSOS - Evidence</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">NSOS</h1>
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="officers.html" class="nav-link">Officers</a>
+                <a href="criminals.html" class="nav-link">Criminals</a>
+                <a href="cases.html" class="nav-link">Cases</a>
+                <a href="evidence.html" class="nav-link active">Evidence</a>
+                <a href="duties.html" class="nav-link">Duties</a>
+                <a href="search.html" class="nav-link">Search</a>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="page-header">
+            <h2>Evidence Management</h2>
+            <button id="addEvidenceBtn" class="btn btn-primary">Upload Evidence</button>
+        </div>
+        
+        <div id="evidenceForm" class="form-modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Upload Evidence</h3>
+                <form id="evidenceFormElement" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="evidence_case_id">Case *</label>
+                        <select id="evidence_case_id" required>
+                            <option value="">Select Case</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="evidence_file">File *</label>
+                        <input type="file" id="evidence_file" required accept=".pdf,.png,.jpg,.jpeg,.gif,.doc,.docx">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="evidence_description">Description</label>
+                        <textarea id="evidence_description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Case Number</th>
+                        <th>File Name</th>
+                        <th>Description</th>
+                        <th>Upload Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="evidenceTableBody">
+                    <tr>
+                        <td colspan="6">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/evidence.js"></script>
+</body>
+</html>
+

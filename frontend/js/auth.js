@@ -1,0 +1,47 @@
+// Authentication helper functions
+
+// Check if user is authenticated
+async function checkAuth() {
+    try {
+        const response = await authAPI.checkAuth();
+        return response.authenticated;
+    } catch (error) {
+        return false;
+    }
+}
+
+// Redirect to login if not authenticated
+async function requireAuth() {
+    const isAuth = await checkAuth();
+    if (!isAuth) {
+        window.location.href = 'index.html';
+        return false;
+    }
+    return true;
+}
+
+// Logout function
+async function logout() {
+    try {
+        await authAPI.logout();
+        window.location.href = 'index.html';
+    } catch (error) {
+        console.error('Logout error:', error);
+        // Still redirect even if logout fails
+        window.location.href = 'index.html';
+    }
+}
+
+// Setup logout button if it exists
+document.addEventListener('DOMContentLoaded', function() {
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+    }
+    
+    // Check auth on pages that need it (except login page)
+    if (!window.location.pathname.includes('index.html')) {
+        requireAuth();
+    }
+});
+

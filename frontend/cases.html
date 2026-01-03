@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSOS - Cases</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">NSOS</h1>
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="officers.html" class="nav-link">Officers</a>
+                <a href="criminals.html" class="nav-link">Criminals</a>
+                <a href="cases.html" class="nav-link active">Cases</a>
+                <a href="evidence.html" class="nav-link">Evidence</a>
+                <a href="duties.html" class="nav-link">Duties</a>
+                <a href="search.html" class="nav-link">Search</a>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="page-header">
+            <h2>Case Management (FIR)</h2>
+            <button id="addCaseBtn" class="btn btn-primary">Register New Case</button>
+        </div>
+        
+        <div id="caseForm" class="form-modal" style="display: none;">
+            <div class="modal-content">
+                <h3 id="formTitle">Register Case</h3>
+                <form id="caseFormElement">
+                    <input type="hidden" id="caseId">
+                    
+                    <div class="form-group">
+                        <label for="case_number">Case Number *</label>
+                        <input type="text" id="case_number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input type="text" id="title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="filed_date">Filed Date *</label>
+                        <input type="date" id="filed_date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="filed_by">Filed By (Officer) *</label>
+                        <select id="filed_by" required>
+                            <option value="">Select Officer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="suspect_id">Suspect (Criminal)</label>
+                        <select id="suspect_id">
+                            <option value="">Select Criminal</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="status">Status *</label>
+                        <select id="status" required>
+                            <option value="Open">Open</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Case #</th>
+                        <th>Title</th>
+                        <th>Filed Date</th>
+                        <th>Officer</th>
+                        <th>Suspect</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="casesTableBody">
+                    <tr>
+                        <td colspan="7">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cases.js"></script>
+</body>
+</html>
+

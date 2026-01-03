@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSOS - Officers</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">NSOS</h1>
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="officers.html" class="nav-link active">Officers</a>
+                <a href="criminals.html" class="nav-link">Criminals</a>
+                <a href="cases.html" class="nav-link">Cases</a>
+                <a href="evidence.html" class="nav-link">Evidence</a>
+                <a href="duties.html" class="nav-link">Duties</a>
+                <a href="search.html" class="nav-link">Search</a>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="page-header">
+            <h2>Officer Management</h2>
+            <button id="addOfficerBtn" class="btn btn-primary">Add Officer</button>
+        </div>
+        
+        <div id="officerForm" class="form-modal" style="display: none;">
+            <div class="modal-content">
+                <h3 id="formTitle">Add Officer</h3>
+                <form id="officerFormElement">
+                    <input type="hidden" id="officerId">
+                    
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="badge_no">Badge Number *</label>
+                        <input type="text" id="badge_no" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rank">Rank</label>
+                        <input type="text" id="rank">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact">Contact</label>
+                        <input type="text" id="contact">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="unit_id">Unit</label>
+                        <select id="unit_id">
+                            <option value="">Select Unit</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Badge No</th>
+                        <th>Rank</th>
+                        <th>Contact</th>
+                        <th>Unit</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="officersTableBody">
+                    <tr>
+                        <td colspan="7">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/officers.js"></script>
+</body>
+</html>
+

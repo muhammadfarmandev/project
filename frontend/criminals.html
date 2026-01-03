@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSOS - Criminals</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">NSOS</h1>
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="officers.html" class="nav-link">Officers</a>
+                <a href="criminals.html" class="nav-link active">Criminals</a>
+                <a href="cases.html" class="nav-link">Cases</a>
+                <a href="evidence.html" class="nav-link">Evidence</a>
+                <a href="duties.html" class="nav-link">Duties</a>
+                <a href="search.html" class="nav-link">Search</a>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="page-header">
+            <h2>Criminal Management</h2>
+            <button id="addCriminalBtn" class="btn btn-primary">Add Criminal</button>
+        </div>
+        
+        <div id="criminalForm" class="form-modal" style="display: none;">
+            <div class="modal-content">
+                <h3 id="formTitle">Add Criminal</h3>
+                <form id="criminalFormElement">
+                    <input type="hidden" id="criminalId">
+                    
+                    <div class="form-group">
+                        <label for="cname">Name *</label>
+                        <input type="text" id="cname" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="caddress">Address</label>
+                        <input type="text" id="caddress">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ccnic">CNIC *</label>
+                        <input type="text" id="ccnic" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cnotes">Notes</label>
+                        <textarea id="cnotes" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>CNIC</th>
+                        <th>Address</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="criminalsTableBody">
+                    <tr>
+                        <td colspan="6">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/criminals.js"></script>
+</body>
+</html>
+

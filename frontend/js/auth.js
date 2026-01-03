@@ -14,6 +14,7 @@ async function checkAuth() {
         }
         
         const data = await response.json();
+        console.log('checkAuth result:', data);
         return data.authenticated || false;
     } catch (error) {
         console.error('Error checking auth:', error);

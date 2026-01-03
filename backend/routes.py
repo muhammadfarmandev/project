@@ -1,7 +1,7 @@
 # Flask routes for NSOS API
 # All CRUD operations and endpoints
 
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, current_app
 from functools import wraps
 import database as db
 import utils
@@ -32,18 +32,38 @@ def login():
         return jsonify({'error': 'Username and password required'}), 400
     
     admin = db.get_admin_by_username(username)
-    if admin and utils.check_password(password, admin['password_hash']):
+    
+    # Debug: check if admin exists and password verification
+    if not admin:
+        print(f"Login: Admin '{username}' not found in database")
+        return jsonify({'error': 'Invalid credentials'}), 401
+    
+    print(f"Login: Admin found - ID: {admin['admin_id']}, Username: {admin['username']}")
+    print(f"Login: Checking password...")
+    
+    password_valid = utils.check_password(password, admin['password_hash'])
+    print(f"Login: Password valid: {password_valid}")
+    
+    if password_valid:
+        # Set session data
         session['admin_id'] = admin['admin_id']
         session['username'] = admin['username']
-        # Force session to be saved and persist
         session.permanent = True
-        # Explicitly mark session as modified to ensure it's saved
         session.modified = True
+        
         # Debug: print session after setting
-        print(f"Login: Session set - {dict(session)}")
+        print(f"Login: Session set - admin_id={session.get('admin_id')}, username={session.get('username')}")
+        print(f"Login: Session dict = {dict(session)}")
+        print(f"Login: Session permanent = {session.permanent}")
+        print(f"Login: Session modified = {session.modified}")
+        
+        # Create response - Flask will automatically add session cookie to response
         response = jsonify({'message': 'Login successful', 'username': admin['username']})
+        
+        # Ensure session is saved (this happens automatically when response is returned)
         return response, 200
     else:
+        print(f"Login: Password check failed for user '{username}'")
         return jsonify({'error': 'Invalid credentials'}), 401
 
 
@@ -62,9 +82,14 @@ def check_auth():
     # Debug: print session contents (remove in production)
     print(f"Check-auth: Session contents: {dict(session)}")
     print(f"Check-auth: admin_id in session: {'admin_id' in session}")
+    print(f"Check-auth: Request cookies: {list(request.cookies.keys())}")
+    
     if 'admin_id' in session:
+        print(f"Check-auth: User authenticated - {session.get('username')}")
         return jsonify({'authenticated': True, 'username': session.get('username')}), 200
-    return jsonify({'authenticated': False}), 200
+    
+    print(f"Check-auth: User NOT authenticated - no admin_id in session")
+    return jsonify({'authenticated': False, 'debug': 'No admin_id in session'}), 200
 
 
 # Officer routes

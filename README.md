@@ -135,8 +135,10 @@ NSOS is a basic police station management system that helps manage:
 
 3. **Set up SQL Server Database**
    - Open SQL Server Management Studio
-   - Create a new database named "NSOS"
-   - Run the SQL script from `database/schema.sql` to create tables and insert sample data
+   - Connect to your SQL Server instance
+   - Open and run the SQL script from `database/schema.sql`
+   - The script will automatically create the "NSOS" database if it doesn't exist
+   - It will also create all tables and insert sample data
 
 4. **Configure Database Connection**
    - Edit `backend/config.py`

@@ -27,6 +27,7 @@ def log_audit(action, table_name, record_id):
                 VALUES (?, ?, ?, ?)
             """, (action, table_name, record_id, datetime.now()))
             conn.commit()
+            cursor.close()
             conn.close()
         except Exception as e:
             print(f"Audit log error: {e}")

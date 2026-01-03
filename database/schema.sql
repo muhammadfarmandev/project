@@ -2,6 +2,17 @@
 -- Police Station Management System
 -- Created for 2nd Semester Project
 
+-- Create database if it doesn't exist
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'NSOS')
+BEGIN
+    CREATE DATABASE NSOS;
+END
+GO
+
+-- Use the NSOS database
+USE NSOS;
+GO
+
 -- Drop tables if they exist (for testing)
 IF OBJECT_ID('AuditLog', 'U') IS NOT NULL DROP TABLE AuditLog;
 IF OBJECT_ID('Evidence', 'U') IS NOT NULL DROP TABLE Evidence;

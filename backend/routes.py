@@ -60,7 +60,10 @@ def login():
         # Create response - Flask will automatically add session cookie to response
         response = jsonify({'message': 'Login successful', 'username': admin['username']})
         
-        # Ensure session is saved (this happens automatically when response is returned)
+        # Session is already set above with session.modified = True
+        # Flask automatically saves session when response is returned
+        # The session cookie will be included in the Set-Cookie header
+        
         return response, 200
     else:
         print(f"Login: Password check failed for user '{username}'")

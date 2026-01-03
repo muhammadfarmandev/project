@@ -1,30 +1,41 @@
 // Dashboard page functionality
 
 document.addEventListener('DOMContentLoaded', async function() {
-    // If we just logged in, wait longer for cookie to be processed
+    // Check if we just logged in
     const justLoggedIn = localStorage.getItem('just_logged_in');
-    let wasJustLoggedIn = false;
     
     if (justLoggedIn === 'true') {
-        wasJustLoggedIn = true;
         localStorage.removeItem('just_logged_in');
-        // Wait longer for cookie to be fully processed by browser
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Wait for cookie to be fully processed by browser after redirect
+        console.log('Just logged in, waiting for session cookie...');
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Longer wait
     }
     
-    // Check authentication first
-    let isAuth = await requireAuth();
+    // Check authentication - with multiple retries if needed
+    let isAuth = false;
+    let retries = justLoggedIn === 'true' ? 3 : 1; // More retries if just logged in
     
-    // If auth failed but we just logged in, try once more after a delay
-    if (!isAuth && wasJustLoggedIn) {
-        console.log('Auth failed after login, retrying...');
-        await new Promise(resolve => setTimeout(resolve, 300));
-        isAuth = await requireAuth();
+    for (let i = 0; i < retries; i++) {
+        isAuth = await checkAuth();
+        console.log(`Auth check attempt ${i + 1}: ${isAuth ? 'SUCCESS' : 'FAILED'}`);
+        
+        if (isAuth) {
+            break;
+        }
+        
+        if (i < retries - 1) {
+            console.log(`Retrying auth check in 500ms...`);
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
     }
     
     if (!isAuth) {
-        return; // requireAuth already redirected, just exit
+        console.error('Authentication failed after all retries. Redirecting to login...');
+        window.location.href = 'index.html';
+        return;
     }
+    
+    console.log('Authentication successful! Loading dashboard...');
     
     // Load statistics
     try {

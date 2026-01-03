@@ -5,7 +5,11 @@ async function checkAuth() {
     try {
         const response = await fetch('http://localhost:5000/api/check-auth', {
             method: 'GET',
-            credentials: 'include' // Important: include cookies
+            credentials: 'include', // Important: include cookies
+            cache: 'no-store', // Don't cache this request
+            headers: {
+                'Cache-Control': 'no-cache'
+            }
         });
         
         if (!response.ok) {
@@ -15,6 +19,10 @@ async function checkAuth() {
         
         const data = await response.json();
         console.log('checkAuth result:', data);
+        
+        // Also log cookies being sent (for debugging)
+        console.log('Cookies available:', document.cookie || 'No cookies found');
+        
         return data.authenticated || false;
     } catch (error) {
         console.error('Error checking auth:', error);

@@ -20,6 +20,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24 hours in seconds
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
+app.config['SESSION_COOKIE_PATH'] = '/'  # Make sure cookie is available for all paths
 
 # Enable CORS for API calls (needed if frontend is on different origin)
 # Since Flask serves static files, same origin, but keeping for flexibility

@@ -50,9 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         logoutBtn.addEventListener('click', logout);
     }
     
-    // Check auth on pages that need it (except login page)
-    if (!window.location.pathname.includes('index.html')) {
-        requireAuth();
-    }
+    // Don't auto-check auth here - let each page handle it
+    // This prevents duplicate checks and timing issues
 });
 

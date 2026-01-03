@@ -35,9 +35,14 @@ def login():
     if admin and utils.check_password(password, admin['password_hash']):
         session['admin_id'] = admin['admin_id']
         session['username'] = admin['username']
-        # Force session to be saved
+        # Force session to be saved and persist
         session.permanent = True
-        return jsonify({'message': 'Login successful', 'username': admin['username']}), 200
+        # Explicitly mark session as modified to ensure it's saved
+        session.modified = True
+        # Debug: print session after setting
+        print(f"Login: Session set - {dict(session)}")
+        response = jsonify({'message': 'Login successful', 'username': admin['username']})
+        return response, 200
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
 
@@ -54,6 +59,9 @@ def logout():
 def check_auth():
     """Check if user is authenticated"""
     # Always return 200, just indicate authentication status
+    # Debug: print session contents (remove in production)
+    print(f"Check-auth: Session contents: {dict(session)}")
+    print(f"Check-auth: admin_id in session: {'admin_id' in session}")
     if 'admin_id' in session:
         return jsonify({'authenticated': True, 'username': session.get('username')}), 200
     return jsonify({'authenticated': False}), 200

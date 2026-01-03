@@ -1,7 +1,19 @@
 // Dashboard page functionality
 
 document.addEventListener('DOMContentLoaded', async function() {
-    await requireAuth();
+    // If we just logged in, skip immediate auth check (give cookie time to set)
+    const justLoggedIn = localStorage.getItem('just_logged_in');
+    if (justLoggedIn === 'true') {
+        localStorage.removeItem('just_logged_in');
+        // Wait a bit for cookie to be fully processed
+        await new Promise(resolve => setTimeout(resolve, 300));
+    }
+    
+    // Check authentication first
+    const isAuth = await requireAuth();
+    if (!isAuth) {
+        return; // requireAuth already redirected, just exit
+    }
     
     // Load statistics
     try {

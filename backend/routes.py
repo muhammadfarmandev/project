@@ -14,9 +14,16 @@ routes = Blueprint('routes', __name__)
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if 'admin_id' not in session:
-            return jsonify({'error': 'Not authenticated'}), 401
-        return f(*args, **kwargs)
+        # Check for admin_id in custom header (localStorage-based auth)
+        admin_id = request.headers.get('X-Admin-ID')
+        if admin_id:
+            return f(*args, **kwargs)
+
+        # Fallback: check Flask session (cookie-based auth)
+        if 'admin_id' in session:
+            return f(*args, **kwargs)
+
+        return jsonify({'error': 'Not authenticated'}), 401
     return decorated_function
 
 
@@ -45,26 +52,18 @@ def login():
     print(f"Login: Password valid: {password_valid}")
     
     if password_valid:
-        # Set session data
+        # Set session data (for cookie-based auth fallback)
         session['admin_id'] = admin['admin_id']
         session['username'] = admin['username']
         session.permanent = True
         session.modified = True
-        
-        # Debug: print session after setting
-        print(f"Login: Session set - admin_id={session.get('admin_id')}, username={session.get('username')}")
-        print(f"Login: Session dict = {dict(session)}")
-        print(f"Login: Session permanent = {session.permanent}")
-        print(f"Login: Session modified = {session.modified}")
-        
-        # Create response - Flask will automatically add session cookie to response
-        response = jsonify({'message': 'Login successful', 'username': admin['username']})
-        
-        # Session is already set above with session.modified = True
-        # Flask automatically saves session when response is returned
-        # The session cookie will be included in the Set-Cookie header
-        
-        return response, 200
+
+        # Return admin_id for localStorage-based auth
+        return jsonify({
+            'message': 'Login successful',
+            'username': admin['username'],
+            'admin_id': admin['admin_id']
+        }), 200
     else:
         print(f"Login: Password check failed for user '{username}'")
         return jsonify({'error': 'Invalid credentials'}), 401

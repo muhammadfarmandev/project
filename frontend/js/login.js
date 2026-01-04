@@ -34,11 +34,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const data = await response.json();
-            
+
             // Login successful - store in localStorage
-            localStorage.setItem('auth_token', 'authenticated');
+            localStorage.setItem('admin_id', data.admin_id);
             localStorage.setItem('username', data.username || username);
-            
+
             // Redirect to dashboard
             window.location.href = 'dashboard.html';
         } catch (error) {

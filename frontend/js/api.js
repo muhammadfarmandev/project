@@ -6,10 +6,16 @@ const API_BASE = 'http://localhost:5000/api';
 async function apiCall(endpoint, method = 'GET', body = null, isFormData = false) {
     const options = {
         method: method,
-        credentials: 'include', // Important for sessions - sends cookies
+        credentials: 'include',
         headers: {}
     };
-    
+
+    // Add admin_id header for authentication (localStorage-based)
+    const adminId = localStorage.getItem('admin_id');
+    if (adminId) {
+        options.headers['X-Admin-ID'] = adminId;
+    }
+
     if (body) {
         if (isFormData) {
             options.body = body;

@@ -2,8 +2,8 @@
 
 // Check if user is authenticated (using localStorage)
 function checkAuth() {
-    const authToken = localStorage.getItem('auth_token');
-    return authToken === 'authenticated';
+    const adminId = localStorage.getItem('admin_id');
+    return adminId !== null && adminId !== '';
 }
 
 // Redirect to login if not authenticated
@@ -28,7 +28,7 @@ async function logout() {
     }
 
     // Clear localStorage
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('admin_id');
     localStorage.removeItem('username');
     window.location.href = 'index.html';
 }

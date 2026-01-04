@@ -5,11 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorMessage = document.getElementById('errorMessage');
     
     // Check if already logged in
-    checkAuth().then(isAuth => {
-        if (isAuth) {
-            window.location.href = 'dashboard.html';
-        }
-    });
+    if (checkAuth()) {
+        window.location.href = 'dashboard.html';
+        return;
+    }
     
     loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -22,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch('http://localhost:5000/api/login', {
                 method: 'POST',
-                credentials: 'include', // Important: include cookies
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -34,11 +32,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error(data.error || 'Login failed');
             }
             
-            // Login successful - set flag and redirect
-            // The session cookie should be set by Flask automatically
-            localStorage.setItem('just_logged_in', 'true');
+            const data = await response.json();
             
-            // Redirect immediately - dashboard will verify session
+            // Login successful - store in localStorage
+            localStorage.setItem('auth_token', 'authenticated');
+            localStorage.setItem('username', data.username || username);
+            
+            // Redirect to dashboard
             window.location.href = 'dashboard.html';
         } catch (error) {
             console.error('Login error:', error);

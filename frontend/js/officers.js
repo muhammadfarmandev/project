@@ -5,7 +5,9 @@ let units = [];
 let editingOfficerId = null;
 
 document.addEventListener('DOMContentLoaded', async function() {
-    await requireAuth();
+    if (!requireAuth()) {
+        return; // Already redirected to login
+    }
     
     // Load units for dropdown
     try {

@@ -4,7 +4,9 @@ let evidence = [];
 let cases = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
-    await requireAuth();
+    if (!requireAuth()) {
+        return; // Already redirected to login
+    }
     
     // Load cases for dropdown
     try {

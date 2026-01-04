@@ -1,7 +1,9 @@
 // Search page functionality
 
 document.addEventListener('DOMContentLoaded', async function() {
-    await requireAuth();
+    if (!requireAuth()) {
+        return; // Already redirected to login
+    }
     
     document.getElementById('searchForm').addEventListener('submit', async function(e) {
         e.preventDefault();

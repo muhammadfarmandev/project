@@ -4,7 +4,9 @@ let criminals = [];
 let editingCriminalId = null;
 
 document.addEventListener('DOMContentLoaded', async function() {
-    await requireAuth();
+    if (!requireAuth()) {
+        return; // Already redirected to login
+    }
     
     loadCriminals();
     

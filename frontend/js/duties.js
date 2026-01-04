@@ -4,7 +4,9 @@ let duties = [];
 let officers = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
-    await requireAuth();
+    if (!requireAuth()) {
+        return; // Already redirected to login
+    }
     
     // Load officers for dropdown
     try {

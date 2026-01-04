@@ -6,7 +6,9 @@ let criminals = [];
 let editingCaseId = null;
 
 document.addEventListener('DOMContentLoaded', async function() {
-    await requireAuth();
+    if (!requireAuth()) {
+        return; // Already redirected to login
+    }
     
     // Load officers and criminals for dropdowns
     try {

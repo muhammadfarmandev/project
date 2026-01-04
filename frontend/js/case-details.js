@@ -4,7 +4,9 @@ let caseData = null;
 let officers = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
-    await requireAuth();
+    if (!requireAuth()) {
+        return; // Already redirected to login
+    }
     
     // Get case ID from URL
     const urlParams = new URLSearchParams(window.location.search);

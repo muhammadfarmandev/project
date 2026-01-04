@@ -71,9 +71,8 @@ def login():
 
 
 @routes.route('/api/logout', methods=['POST'])
-@login_required
 def logout():
-    """Logout"""
+    """Logout - no auth required, just clear session"""
     session.clear()
     return jsonify({'message': 'Logged out successfully'}), 200
 

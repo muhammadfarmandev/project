@@ -305,7 +305,7 @@ def get_all_cases():
             cursor.execute("""
                 SELECT c.case_id, c.case_number, c.title, c.description, c.filed_date,
                        c.filed_by, o.name as officer_name, c.suspect_id, cr.name as suspect_name, c.status
-                FROM [Case] c
+                FROM Case_table c
                 LEFT JOIN Officer o ON c.filed_by = o.officer_id
                 LEFT JOIN Criminal cr ON c.suspect_id = cr.criminal_id
                 ORDER BY c.case_id DESC
@@ -340,7 +340,7 @@ def get_case_by_id(case_id):
             cursor.execute("""
                 SELECT c.case_id, c.case_number, c.title, c.description, c.filed_date,
                        c.filed_by, o.name as officer_name, c.suspect_id, cr.name as suspect_name, c.status
-                FROM [Case] c
+                FROM Case_table c
                 LEFT JOIN Officer o ON c.filed_by = o.officer_id
                 LEFT JOIN Criminal cr ON c.suspect_id = cr.criminal_id
                 WHERE c.case_id = ?
@@ -369,24 +369,35 @@ def get_case_by_id(case_id):
 
 def create_case(case_number, title, description, filed_date, filed_by, suspect_id, status):
     """Create new case"""
+    print(f"=== DB CREATE CASE ===")
+    print(f"Parameters: case_number={case_number}, title={title}, filed_date={filed_date}")
+    print(f"filed_by={filed_by} (type: {type(filed_by)}), suspect_id={suspect_id} (type: {type(suspect_id)})")
+
     conn = get_db_connection()
-    if conn:
-        try:
-            cursor = conn.cursor()
-            cursor.execute("""
-                INSERT INTO [Case] (case_number, title, description, filed_date, filed_by, suspect_id, status)
-                OUTPUT INSERTED.case_id
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, (case_number, title, description, filed_date, filed_by, suspect_id, status))
-            case_id = cursor.fetchone()[0]
-            conn.commit()
-            log_audit('INSERT', 'Case', case_id)
+    if not conn:
+        print("ERROR: Could not get database connection")
+        return None
+
+    try:
+        cursor = conn.cursor()
+        print("Executing INSERT query...")
+        cursor.execute("""
+            INSERT INTO Case_table (case_number, title, description, filed_date, filed_by, suspect_id, status)
+            OUTPUT INSERTED.case_id
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (case_number, title, description, filed_date, filed_by, suspect_id, status))
+        case_id = cursor.fetchone()[0]
+        conn.commit()
+        print(f"Case created successfully with ID: {case_id}")
+        log_audit('INSERT', 'Case', case_id)
+        conn.close()
+        return case_id
+    except Exception as e:
+        print(f"ERROR creating case: {e}")
+        import traceback
+        traceback.print_exc()
+        if conn:
             conn.close()
-            return case_id
-        except Exception as e:
-            print(f"Error creating case: {e}")
-            if conn:
-                conn.close()
     return None
 
 
@@ -397,7 +408,7 @@ def update_case(case_id, case_number, title, description, filed_date, filed_by, 
         try:
             cursor = conn.cursor()
             cursor.execute("""
-                UPDATE [Case]
+                UPDATE Case_table
                 SET case_number = ?, title = ?, description = ?, filed_date = ?,
                     filed_by = ?, suspect_id = ?, status = ?
                 WHERE case_id = ?
@@ -419,7 +430,7 @@ def delete_case(case_id):
     if conn:
         try:
             cursor = conn.cursor()
-            cursor.execute("DELETE FROM [Case] WHERE case_id = ?", (case_id,))
+            cursor.execute("DELETE FROM Case_table WHERE case_id = ?", (case_id,))
             conn.commit()
             log_audit('DELETE', 'Case', case_id)
             conn.close()
@@ -496,7 +507,7 @@ def get_all_evidence():
             cursor.execute("""
                 SELECT e.evidence_id, e.case_id, c.case_number, e.file_name, e.description, e.upload_date
                 FROM Evidence e
-                LEFT JOIN [Case] c ON e.case_id = c.case_id
+                LEFT JOIN Case_table c ON e.case_id = c.case_id
                 ORDER BY e.upload_date DESC
             """)
             for row in cursor.fetchall():
@@ -674,7 +685,7 @@ def search_cases(query):
             cursor.execute("""
                 SELECT c.case_id, c.case_number, c.title, c.description, c.filed_date,
                        c.filed_by, o.name as officer_name, c.suspect_id, cr.name as suspect_name, c.status
-                FROM [Case] c
+                FROM Case_table c
                 LEFT JOIN Officer o ON c.filed_by = o.officer_id
                 LEFT JOIN Criminal cr ON c.suspect_id = cr.criminal_id
                 WHERE c.case_number LIKE ? OR o.name LIKE ? OR c.title LIKE ?

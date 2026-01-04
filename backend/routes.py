@@ -255,6 +255,9 @@ def get_case(case_id):
 def create_case():
     """Create new case"""
     data = request.get_json()
+    print(f"=== CREATE CASE DEBUG ===")
+    print(f"Received data: {data}")
+
     case_number = data.get('case_number')
     title = data.get('title')
     description = data.get('description', '')
@@ -262,14 +265,29 @@ def create_case():
     filed_by = data.get('filed_by')
     suspect_id = data.get('suspect_id')
     status = data.get('status', 'Open')
-    
+
+    print(f"case_number: {case_number}, type: {type(case_number)}")
+    print(f"title: {title}, type: {type(title)}")
+    print(f"filed_date: {filed_date}, type: {type(filed_date)}")
+    print(f"filed_by: {filed_by}, type: {type(filed_by)}")
+    print(f"suspect_id: {suspect_id}, type: {type(suspect_id)}")
+    print(f"status: {status}, type: {type(status)}")
+
     if not case_number or not title or not filed_date or not filed_by:
+        print(f"Validation failed - missing required fields")
         return jsonify({'error': 'Case number, title, filed date, and filed by are required'}), 400
-    
-    case_id = db.create_case(case_number, title, description, filed_date, filed_by, suspect_id, status)
-    if case_id:
-        return jsonify({'message': 'Case created', 'case_id': case_id}), 201
-    return jsonify({'error': 'Failed to create case'}), 500
+
+    try:
+        case_id = db.create_case(case_number, title, description, filed_date, filed_by, suspect_id, status)
+        print(f"db.create_case returned: {case_id}")
+        if case_id:
+            return jsonify({'message': 'Case created', 'case_id': case_id}), 201
+        return jsonify({'error': 'Failed to create case - database returned None'}), 500
+    except Exception as e:
+        print(f"Exception in create_case: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': f'Failed to create case: {str(e)}'}), 500
 
 
 @routes.route('/api/cases/<int:case_id>', methods=['PUT'])

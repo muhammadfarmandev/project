@@ -14,9 +14,20 @@ function requireAuth() {
     }
     return true;
 }
+    
+// Logout function - clears both localStorage and server session
+async function logout() {
+    // Clear server session
+    try {
+        await fetch('http://localhost:5000/api/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+    } catch (error) {
+        console.error('Logout error:', error);
+    }
 
-// Logout function
-function logout() {
+    // Clear localStorage
     localStorage.removeItem('auth_token');
     localStorage.removeItem('username');
     window.location.href = 'index.html';

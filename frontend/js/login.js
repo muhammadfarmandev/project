@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                credentials: 'include', // Required: allows browser to save session cookie from Flask
                 body: JSON.stringify({ username, password })
             });
             
